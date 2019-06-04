@@ -3,7 +3,7 @@ import jdk.swing.interop.SwingInterOpUtils;
 import java.util.Scanner;
 public class Main
 {
-    public static void adicionarFuncionar(String[][] funcionarios, int number)
+    public static void adicionarFuncionar(String[][] funcionarios, int number, double[][] valoresfunci)
     {
         int x;
         Scanner input = new Scanner(System.in);
@@ -33,6 +33,17 @@ public class Main
                 funcionarios[number][2] = "commissioned";
                 break;
         }
+
+        if("hourly".equals(funcionarios[number][2]))
+        {
+            System.out.print("Funcionário horista, não recebe salário mensal \n");
+        }
+        else
+        {
+            System.out.print("Digite o salário: ");
+            valoresfunci[number][5] = input.nextDouble();
+        }
+        System.out.print("\n");
     }
 
     public static void removerFuncinar(String[][] funcionarios, int[] number, int Max)
@@ -70,12 +81,12 @@ public class Main
 
         if(number[numero] == 1)
         {
-            System.out.println("Digite 1 para alterar nome");
-            System.out.println("Digite 2 para alterar endereço");
-            System.out.println("Digite 3 para alterar tipo do funcionario");
-            System.out.println("Digite 4 para alterar método de pagamento");
-            System.out.println("Digite 5 para alterar status no sindicato");
-            System.out.println("Digite 6 para alterar taxa sindical");
+            System.out.println("1 - Para alterar nome");
+            System.out.println("2 - Para alterar endereço");
+            System.out.println("3 - Para alterar tipo do funcionario");
+            System.out.println("4 - Para alterar método de pagamento");
+            System.out.println("5 - Para alterar status no sindicato");
+            System.out.println("6 - Para alterar taxa sindical");
 
             x = input.nextInt();
             input.nextLine();
@@ -85,27 +96,40 @@ public class Main
                     System.out.print("Digite novo nome: ");
                     funcionarios[numero][0] = input.nextLine();
                     break;
+
                 case 2:
                     System.out.print("Digite novo endereço: ");
                     funcionarios[numero][1] = input.nextLine();
                     break;
+
                 case 3:
                     System.out.print("Digite novo tipo: ");
                     funcionarios[numero][2] = input.nextLine();
                     break;
+
                 case 4:
                     System.out.print("Digite novo método de pagamento: 1 - Cheque pelos correios, 2 - Cheque em mãos, 3 - Depósito");
                     valoresfunci[numero][3] = input.nextInt();
                     break;
+
                 case 5:
                     System.out.print("Digite novo status sindical(1 - pertence, 0 - não pertence):");
                     valoresfunci[numero][0] = input.nextInt();
                     break;
+
                 case 6:
-                    System.out.print("Digite nova taxa sindical: ");
-                    valoresfunci[numero][2] = input.nextInt();
+                    if(valoresfunci[numero][0] == 0)
+                    {
+                        System.out.println("Operação não possível. Funcionário não pertence ao sindicato.");
+                    }
+                    else
+                    {
+                        System.out.print("Digite nova taxa sindical: ");
+                        valoresfunci[numero][2] = input.nextInt();
+                    }
                     break;
             }
+            System.out.print("\n");
         }
         else
             System.out.println("Funcionario não existe \n");
@@ -124,8 +148,8 @@ public class Main
 
         if(valoresfunci[x][0] == 1)
         {
-            System.out.println("Digite o valor da taxa sindical: ");
-            valoresfunci[x][2] = input.nextDouble();
+            System.out.println("Digite o valor da taxa de serviço: ");
+            valoresfunci[x][7] = input.nextDouble();
         }
         else
         {
@@ -176,6 +200,64 @@ public class Main
             System.out.println("Esse funcionário não é do tipo horista");
     }
 
+    public static void funciInfo(String[][] funcionarios, int[] number, int Max, double[][] valoresfunci)
+    {
+        int x, i, j;
+
+        System.out.println("Digite o número do funcionário que deseja olhar informação: ");
+        printarFunci(funcionarios, number, Max);
+
+        Scanner input = new Scanner(System.in);
+        x = input.nextInt();
+
+        System.out.println("------------ Detalhes do Funcionário ------------");
+
+        System.out.print("Nome: ");
+        System.out.println(funcionarios[x][0]);
+        System.out.print("Endereço: ");
+        System.out.println(funcionarios[x][1]);
+        System.out.print("Tipo: ");
+        System.out.println(funcionarios[x][2]);
+        System.out.print("Status sindicato: ");
+        if(valoresfunci[x][0] == 0)
+        {
+            System.out.print("Não pertence");
+        }
+        else
+        {
+            System.out.print("Pertence");
+        }
+        System.out.print("  Taxa sindical: ");
+        System.out.println(valoresfunci[x][2]);
+        System.out.print("Método de pagamento: ");
+        if(valoresfunci[x][3] == 1)
+        {
+            System.out.println("Cheque pelos correios");
+        }
+        else if(valoresfunci[x][3] == 2)
+        {
+            System.out.println("Cheque em mãos");
+        }
+        else if(valoresfunci[x][3] == 3)
+        {
+            System.out.println("Depósito bancário");
+        }
+        else
+            System.out.println("Método de pagamento não especificado nos detalhes do funcionário");
+        if("hourly".equals(funcionarios[x][2]))
+        {
+            System.out.println("Funcionário horista(não recebe salário mensal).");
+        }
+        else
+        {
+            System.out.print("Salário: ");
+            System.out.println(valoresfunci[x][5]);
+        }
+
+        System.out.println("------------  //  // ------------");
+
+    }
+
     public static void printarFunci(String[][] funcionarios, int[] number, int Max)
     {
         int i;
@@ -197,8 +279,9 @@ public class Main
         int Maxfunci = 100, Atributos = 10;
         boolean truee = true;
         int numerofunci[] = new int[Maxfunci];
-        double valoresfunci[][] = new double[Maxfunci][7]; // 0 - Se pretence ou não ao sindicato, 1 - Dia de Pagamento, 2 - taxa sindical, 3 - Método de pagamento, 4 - Resultado de vendas, 5 - Salário, 6 - Horas
-        String funcionarios[][] = new String[Maxfunci][Atributos]; //Em Atributos 0 - Nome, 1 - Endereço, 2 - Tipo
+        double valoresfunci[][] = new double[Maxfunci][8];         // 0 - Se pretence ou não ao sindicato, 1 - Dia de Pagamento, 2 - taxa sindical, 3 - Método de pagamento
+        String funcionarios[][] = new String[Maxfunci][Atributos]; // 4 - Resultado de vendas, 5 - Salário, 6 - Horas, 7 - Taxa de Serviço
+                                                                   //Em Atributos 0 - Nome, 1 - Endereço, 2 - Tipo
 
         for(i = 0; i < Maxfunci; i++)
         {
@@ -208,14 +291,14 @@ public class Main
             }
         }
 
-        for(i = 0; i < Maxfunci; i++)
+        /*for(i = 0; i < Maxfunci; i++)
         {
             for (j = 0; j < 7; j++)
             {
                 System.out.println(valoresfunci[i][j]);
             }
             System.out.println("\n");
-        }
+        }*/
 
         for(i = 0; i < Maxfunci; i++)
         {
@@ -233,10 +316,11 @@ public class Main
             System.out.println("4 -  Lançar resultado de venda");
             System.out.println("5 -  Lançar taxa de serviço");
             System.out.println("6 -  Alterar detalhes de um empregado");
-            System.out.println("7 -  Rodar folha de pagamento do dia");
-            System.out.println("8 -  Undo/Redo");
-            System.out.println("9 -  Agenda de pagamento");
-            System.out.println("10 - Criação de nova agenda de pagamento \n");
+            System.out.println("7 -  Mostrar informações dos funcionários");
+            System.out.println("8 -  Rodar folha de pagamento do dia");
+            System.out.println("9 -  Undo/Redo");
+            System.out.println("10 - Agenda de pagamento");
+            System.out.println("11 - Criação de nova agenda de pagamento \n");
             System.out.print("Digite o número de uma das opções: ");
 
             Scanner input = new Scanner(System.in);
@@ -246,7 +330,7 @@ public class Main
             switch(casee)
             {
                 case 1:
-                    adicionarFuncionar(funcionarios, contarfunci);
+                    adicionarFuncionar(funcionarios, contarfunci, valoresfunci);
                     numerofunci[contarfunci] = 1;
                     contarfunci ++;
                     break;
@@ -272,7 +356,7 @@ public class Main
                     break;
 
                 case 7:
-
+                    funciInfo(funcionarios, numerofunci, Maxfunci, valoresfunci);
                     break;
                 case 8:
 
