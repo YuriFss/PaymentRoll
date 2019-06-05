@@ -306,7 +306,7 @@ public class Main
         c.setTime(data);
 
         int dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
-        System.out.println((dayOfMonth));
+        //System.out.println((dayOfMonth));
 
         for(i = 0; i < Max; i++)
         {
@@ -437,9 +437,9 @@ public class Main
             System.out.println("6 -  Alterar detalhes de um empregado");
             System.out.println("7 -  Mostrar informações dos funcionários");
             System.out.println("8 -  Rodar folha de pagamento do dia");
-            System.out.println("9 -  Undo/Redo");
-            System.out.println("10 - Agenda de pagamento");
-            System.out.println("11 - Criação de nova agenda de pagamento \n");
+            System.out.println("9 -  Undo/Redo                            - Not Implemented");
+            System.out.println("10 - Agenda de pagamento                  - Not Implemented");
+            System.out.println("11 - Criação de nova agenda de pagamento  - Not Implemented\n");
             System.out.print("Digite o número de uma das opções: ");
 
             Scanner input = new Scanner(System.in);
@@ -487,6 +487,9 @@ public class Main
 
                     break;
                 case 10:
+
+                    break;
+                case 11:
 
                     break;
             }
