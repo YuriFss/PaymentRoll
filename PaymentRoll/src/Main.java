@@ -327,8 +327,8 @@ public class Main
                     System.out.println("Código: " + i);
                     System.out.println("Taxa sindical deduzida: " + valoresfunci[i][2]);
                     System.out.println("Taxa de serviço deduzida: " + valoresfunci[i][7]);
+                    System.out.println("Valor pago: " + ((valoresfunci[i][6]) - (valoresfunci[i][2]+valoresfunci[i][7])));
                     valoresfunci[i][7] = 0;
-                    System.out.println("Valor pago: " + valoresfunci[i][6]);
                     valoresfunci[i][6] = 0;
                 }
                 else if(valoresfunci[i][0] == 0)
@@ -349,8 +349,8 @@ public class Main
                     System.out.println("Código: " + i);
                     System.out.println("Taxa sindical deduzida: " + valoresfunci[i][2]);
                     System.out.println("Taxa de serviço deduzida: " + valoresfunci[i][7]);
+                    System.out.println("Valor pago: " + ((valoresfunci[i][5]) - (valoresfunci[i][2]+valoresfunci[i][7])));
                     valoresfunci[i][7] = 0;
-                    System.out.println("Valor pago: " + valoresfunci[i][5]);
                 }
                 else if(valoresfunci[i][0] == 0)
                 {
@@ -358,6 +358,28 @@ public class Main
                     System.out.println("Nome: " + funcionarios[i][0]);
                     System.out.println("Código: " + i);
                     System.out.println("Valor pago: " + valoresfunci[i][5]);
+                }
+            }
+            else if(number[i] == 1 && "commissioned".equals(funcionarios[i][2]) && "sexta-feira".equals(dia))
+            {
+                if(valoresfunci[i][0] == 1)
+                {
+                    System.out.println("------ Funcionário comissionado pago ------");
+                    System.out.println("Nome: " + funcionarios[i][0]);
+                    System.out.println("Código: " + i);
+                    System.out.println("Taxa sindical deduzida: " + valoresfunci[i][2]);
+                    System.out.println("Taxa de serviço deduzida: " + valoresfunci[i][7]);
+                    System.out.println("Valor pago: " + ((valoresfunci[i][5]+valoresfunci[i][4]) - (valoresfunci[i][2]+valoresfunci[i][7])));
+                    valoresfunci[i][7] = 0;
+                    valoresfunci[i][4] = 0;
+                }
+                else if(valoresfunci[i][0] == 0)
+                {
+                    System.out.println("------ Funcionário comissionado pago ------");
+                    System.out.println("Nome: " + funcionarios[i][0]);
+                    System.out.println("Código: " + i);
+                    System.out.println("Valor pago: " + (valoresfunci[i][5]+valoresfunci[i][4]));
+                    valoresfunci[i][4] = 0;
                 }
             }
         }
@@ -461,11 +483,8 @@ public class Main
                     c.add(Calendar.DATE, 1);
                     data = c.getTime();
                     break;
-
                 case 9:
-                    c.getTime();
-                    c.add(Calendar.DATE, 1);
-                    data = c.getTime();
+
                     break;
                 case 10:
 
