@@ -1,6 +1,11 @@
-import jdk.swing.interop.SwingInterOpUtils;
-
+import java.util.Calendar;
 import java.util.Scanner;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+
+
 public class Main
 {
     public static void adicionarFuncionar(String[][] funcionarios, int number, double[][] valoresfunci)
@@ -36,7 +41,7 @@ public class Main
 
         if("hourly".equals(funcionarios[number][2]))
         {
-            System.out.print("Funcionário horista, não recebe salário mensal \n");
+            System.out.print("Funcionário horista, recebe 4.54R$/hora. Baseado no salário mínimo \n");
         }
         else
         {
@@ -181,6 +186,7 @@ public class Main
     public static void lançarCartão(String[][] funcionarios, int[] number, int Max, double[][] valoresfunci)
     {
         int horas, x;
+        double valortotal;
         String tipo;
         Scanner input = new Scanner(System.in);
 
@@ -190,11 +196,23 @@ public class Main
         x = input.nextInt();
         tipo = "hourly";
 
+        //Tendo como base o salário mínimo. O valor hora do salário é calculado a partir deste site: http://www.guiatrabalhista.com.br/guia/salario_minimo.htm
         if(tipo.equals(funcionarios[x][2]))
         {
             System.out.println("Digite a quantidade de horas trabalhadas: ");
             horas = input.nextInt();
-            valoresfunci[x][6] += horas;
+            if(horas > 8)
+            {
+                valortotal = 8 * 4.54;
+                horas = horas - 8;
+                valortotal = valortotal + (horas * 4.54 * 1.5);
+                valoresfunci[x][6] = valoresfunci[x][6] + valortotal;
+            }
+            else
+            {
+                valortotal = 8 * 4.54;
+                valoresfunci[x][6] = valoresfunci[x][6] + valortotal;
+            }
         }
         else
             System.out.println("Esse funcionário não é do tipo horista");
@@ -202,7 +220,7 @@ public class Main
 
     public static void funciInfo(String[][] funcionarios, int[] number, int Max, double[][] valoresfunci)
     {
-        int x, i, j;
+        int x;
 
         System.out.println("Digite o número do funcionário que deseja olhar informação: ");
         printarFunci(funcionarios, number, Max);
@@ -273,6 +291,50 @@ public class Main
         }
     }
 
+    public static void rodarFolha(String[][] funcionarios, int[] number, int Max, double[][] valoresfunci)
+    {
+        int i;
+        //Date now = new Date();
+        //SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE");
+
+        //String data = simpleDateformat.format(new Date());
+        //Calendar cal = Calendar.getInstance();
+        //int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+        Calendar c = Calendar.getInstance();
+        Date data = c.getTime();
+        c.add(Calendar.DATE, 1);
+        data = c.getTime();
+
+        System.out.println(data);
+
+        /*for(i = 0; i < Max; i++)
+        {
+            if(number[i] == 1 && "hourly".equals(funcionarios[i][2]) && "sexta-feira".equals(data))
+            {
+                System.out.println("Funcionário horista pago: ");
+                System.out.println("Valor pago: " + valoresfunci[i][6]);
+                valoresfunci[i][6] = 0;
+            }
+            else if(number[i] == 1 && "hourly".equals(funcionarios[i][2]) && dayOfMonth == 30)
+            {
+                if(valoresfunci[i][0] == 1)
+                {
+                    System.out.println("Valores da taxa sindical e taxa de serviços a serem deduzidas: " + valoresfunci[i][2] + valoresfunci[i][7]);
+                    valoresfunci[i][7] = 0;
+                    System.out.println("Funcionário horista pago: ");
+                    System.out.println("Valor pago: " + valoresfunci[i][6]);
+                    valoresfunci[i][6] = 0;
+                }
+                else if(valoresfunci[i][0] == 0)
+                {
+                    System.out.println("Funcionário horista pago: ");
+                    System.out.println("Valor pago: " + valoresfunci[i][6]);
+                    valoresfunci[i][6] = 0;
+                }
+            }
+        }*/
+    }
+
     public static void main(String[] args)
     {
         int casee, contarfunci = 0, i, j;
@@ -280,8 +342,12 @@ public class Main
         boolean truee = true;
         int numerofunci[] = new int[Maxfunci];
         double valoresfunci[][] = new double[Maxfunci][8];         // 0 - Se pretence ou não ao sindicato, 1 - Dia de Pagamento, 2 - taxa sindical, 3 - Método de pagamento
-        String funcionarios[][] = new String[Maxfunci][Atributos]; // 4 - Resultado de vendas, 5 - Salário, 6 - Horas, 7 - Taxa de Serviço
+        String funcionarios[][] = new String[Maxfunci][Atributos]; // 4 - Resultado de vendas, 5 - Salário, 6 - Valor Horas, 7 - Taxa de Serviço
                                                                    //Em Atributos 0 - Nome, 1 - Endereço, 2 - Tipo
+
+        Calendar c = Calendar.getInstance();
+        Date data = c.getTime();
+        DateFormat f = DateFormat.getDateInstance(DateFormat.FULL);
 
         for(i = 0; i < Maxfunci; i++)
         {
@@ -305,10 +371,13 @@ public class Main
             numerofunci[i] = 0;
         }
 
+        System.out.println("\n");
         System.out.println("\n -----Folha de Pagamento----- \n");
 
         while(true)
         {
+            System.out.println("A data de hoje é: " + f.format(data));
+
             System.out.println("Opções: ");
             System.out.println("1 -  Adicionar novo empregado");
             System.out.println("2 -  Remover um empregado");
@@ -359,11 +428,16 @@ public class Main
                     funciInfo(funcionarios, numerofunci, Maxfunci, valoresfunci);
                     break;
                 case 8:
-
+                    rodarFolha(funcionarios, numerofunci, Maxfunci, valoresfunci);
+                    c.getTime();
+                    c.add(Calendar.DATE, 1);
+                    data = c.getTime();
                     break;
 
                 case 9:
-
+                    c.getTime();
+                    c.add(Calendar.DATE, 1);
+                    data = c.getTime();
                     break;
                 case 10:
 
