@@ -291,27 +291,30 @@ public class Main
         }
     }
 
-    public static void rodarFolha(String[][] funcionarios, int[] number, int Max, double[][] valoresfunci)
+    public static void rodarFolha(String[][] funcionarios, int[] number, int Max, double[][] valoresfunci, Date data)
     {
         int i;
-        //Date now = new Date();
-        //SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE");
-
-        //String data = simpleDateformat.format(new Date());
-        //Calendar cal = Calendar.getInstance();
-        //int dayOfMonth = cal.get(Calendar.DAY_OF_MONTH);
+        SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE");
         Calendar c = Calendar.getInstance();
-        Date data = c.getTime();
         c.add(Calendar.DATE, 1);
-        data = c.getTime();
 
-        System.out.println(data);
+        //System.out.println(simpleDateformat.format(data));
 
-        /*for(i = 0; i < Max; i++)
+        String dia = simpleDateformat.format(data);
+        //System.out.println(dia);
+
+        c.setTime(data);
+
+        int dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+        System.out.println((dayOfMonth));
+
+        for(i = 0; i < Max; i++)
         {
-            if(number[i] == 1 && "hourly".equals(funcionarios[i][2]) && "sexta-feira".equals(data))
+            if(number[i] == 1 && "hourly".equals(funcionarios[i][2]) && "sexta-feira".equals(dia))
             {
-                System.out.println("Funcionário horista pago: ");
+                System.out.println("------ Funcionário horista pago ------");
+                System.out.println("Nome: " + funcionarios[i][0]);
+                System.out.println("Código: " + i);
                 System.out.println("Valor pago: " + valoresfunci[i][6]);
                 valoresfunci[i][6] = 0;
             }
@@ -319,20 +322,45 @@ public class Main
             {
                 if(valoresfunci[i][0] == 1)
                 {
-                    System.out.println("Valores da taxa sindical e taxa de serviços a serem deduzidas: " + valoresfunci[i][2] + valoresfunci[i][7]);
+                    System.out.println("------ Funcionário horista pago ------");
+                    System.out.println("Nome: " + funcionarios[i][0]);
+                    System.out.println("Código: " + i);
+                    System.out.println("Taxa sindical deduzida: " + valoresfunci[i][2]);
+                    System.out.println("Taxa de serviço deduzida: " + valoresfunci[i][7]);
                     valoresfunci[i][7] = 0;
-                    System.out.println("Funcionário horista pago: ");
                     System.out.println("Valor pago: " + valoresfunci[i][6]);
                     valoresfunci[i][6] = 0;
                 }
                 else if(valoresfunci[i][0] == 0)
                 {
-                    System.out.println("Funcionário horista pago: ");
+                    System.out.println("------ Funcionário horista pago ------");
+                    System.out.println("Nome: " + funcionarios[i][0]);
+                    System.out.println("Código: " + i);
                     System.out.println("Valor pago: " + valoresfunci[i][6]);
                     valoresfunci[i][6] = 0;
                 }
             }
-        }*/
+            else if(number[i] == 1 && "salaried".equals(funcionarios[i][2]) && dayOfMonth == 30)
+            {
+                if(valoresfunci[i][0] == 1)
+                {
+                    System.out.println("------ Funcionário assalariado pago ------");
+                    System.out.println("Nome: " + funcionarios[i][0]);
+                    System.out.println("Código: " + i);
+                    System.out.println("Taxa sindical deduzida: " + valoresfunci[i][2]);
+                    System.out.println("Taxa de serviço deduzida: " + valoresfunci[i][7]);
+                    valoresfunci[i][7] = 0;
+                    System.out.println("Valor pago: " + valoresfunci[i][5]);
+                }
+                else if(valoresfunci[i][0] == 0)
+                {
+                    System.out.println("------ Funcionário assalariado pago ------");
+                    System.out.println("Nome: " + funcionarios[i][0]);
+                    System.out.println("Código: " + i);
+                    System.out.println("Valor pago: " + valoresfunci[i][5]);
+                }
+            }
+        }
     }
 
     public static void main(String[] args)
@@ -428,7 +456,7 @@ public class Main
                     funciInfo(funcionarios, numerofunci, Maxfunci, valoresfunci);
                     break;
                 case 8:
-                    rodarFolha(funcionarios, numerofunci, Maxfunci, valoresfunci);
+                    rodarFolha(funcionarios, numerofunci, Maxfunci, valoresfunci, data);
                     c.getTime();
                     c.add(Calendar.DATE, 1);
                     data = c.getTime();
